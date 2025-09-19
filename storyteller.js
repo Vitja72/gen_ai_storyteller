@@ -1,10 +1,33 @@
 import { StorytellerAgent } from "./agent.js";
+import { promptUser } from "./utils.js";
 
-const persona = "Du bist ein sanfter, kreativer Geschichten-Erzähler für Kindergeschichten. Du verwendest einfache, positive Sprache. Deine Aufgabe ist es, eine interessante Gute-Nacht-Geschichte zu erzählen, die das Kind beruhigt."
-const storyline = "Es war einmal ein kleiner verlorener Teddybär, der einsam im Wald saß.";
+async function startStorytelling() {
 
-const agent = new StorytellerAgent(persona, storyline);
+    const persona = "Du bist ein sanfter, kreativer Märchen-Erzähler für Kindergeschichten. Du verwendest einfache, positive Sprache. Deine Aufgabe ist es, ein interessantes Gute-Nacht-Märchen zu erzählen, das das Kind beruhigt.";
+    const storyline = "Es war einmal ein kleiner verlorener Teddybär, der einsam im Wald saß.";
 
-// const userPrompt = prompt("Wie soll das Märchen weitergehen ? ");
+    const agent = new StorytellerAgent(persona, storyline);
 
-agent.continueStory("");
+    console.log("Willkommen! Ich erzähle dir ein schönes Märchen!")
+    console.log("Die Geschichte beginnt...\n")
+    console.log(storyline +"\n");
+
+    let keepGoing = true;
+
+    while (keepGoing) {
+        const userCommand = await promptUser("Wie soll es weitergehen ? \n z.b. 'Ein magischer Schmetterling taucht auf.' \n 'Der Bär trifft einen Freund'\n oder 'Ende'\n");
+        
+        if (userCommand.toLowerCase() === "ende" ) {
+            console.log("\nVielen Dank fürs zuhören. Gute Nacht!");
+            keepGoing = false;
+
+        } else {
+            await agent.continueStory(userCommand);
+            console.log("\n");
+        }
+    }
+    
+}
+
+startStorytelling();
+
